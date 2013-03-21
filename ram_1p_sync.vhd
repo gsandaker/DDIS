@@ -7,8 +7,7 @@
 library ieee;
 use ieee.std_logic_1164.all;
 use ieee.numeric_std.all;
---! @brief RAM module of size 8 by 8
---! @details generic size can be changed in implementation
+
 entity ram_1p_sync is
    generic(
       ADDR_WIDTH: integer:=8;
@@ -22,12 +21,48 @@ entity ram_1p_sync is
       dout: out std_logic_vector(DATA_WIDTH-1 downto 0)
     );
 end ram_1p_sync;
---! @brief arch defines it to be synchronous 
+
 architecture arch of ram_1p_sync is
-   type ram_type is array (2**ADDR_WIDTH-1 downto 0)
+	type ram_type is array (2**ADDR_WIDTH-1 downto 0)
         of std_logic_vector (DATA_WIDTH-1 downto 0);
-   signal ram: ram_type;
-   signal addr_reg: std_logic_vector(ADDR_WIDTH-1 downto 0);
+	signal addr_reg: std_logic_vector(ADDR_WIDTH-1 downto 0);
+	
+	
+	signal ram: ram_type:=(
+		"10100001",  -- RST
+		"10101110",  -- TMS0
+		"10101111",  -- TMS1
+		"10101111",  -- TMS1
+		"10101110",  -- TMS0
+		"10101110",  -- TMS0
+		"10100100",  -- SHFCP 
+		"00010010",  -- 18D
+		"00110011",  -- 33H
+		"00110011",  -- 33H
+		"00110011",  -- 33H
+		"10000001",	 -- 81
+		"10000001",	 -- 81
+		"00000000",	 -- dont care
+		"11111111",	 -- mask FF
+		"11111111",	 -- mask FF
+		"00000000",	 -- mask 00
+		"10101111",  -- TMS1
+		"10101111",  -- TMS1		
+		"10101110",  -- TMS0
+		"10101110",  -- TMS0
+		"10100011",  -- SHF [ 8,00 ] 
+		"00010000",  -- 8
+		"00000000",  -- 0
+		"10101111",  -- TMS1	
+		"00000000",  -- NOP
+		"00000000",  -- NOP		
+		"00000000",  -- NOP
+		"00000000",  -- NOP		
+		"00000000",  -- NOP
+		"00000000",  -- NOP		
+		"00000000"   -- NOP
+	);
+   
 begin
    process (clk)
    begin

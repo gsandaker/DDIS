@@ -1,6 +1,7 @@
 -------------------------------------------------------------------------------------
 --! @file 
---! @brief DDIS3010 BST processor  (supporting SELTAP1/2, RST, TMS0/1, NTCK, SHF, SHFCP, EOP)
+--! @brief DDIS3010 BST processor  
+--! (supporting SELTAP1/2, RST, TMS0/1, NTCK, SHF, SHFCP, EOP)
 --! @author GJB
 -------------------------------------------------------------------------------------
 library IEEE;
@@ -11,7 +12,8 @@ use IEEE.NUMERIC_STD.ALL;
 --! @details bstprocV1 controls the states based on 
 --! the instruction on dbus (databus)
 entity bstprocV1 is
-    Port ( clk : in  STD_LOGIC;
+    Port ( push : in STD_LOGIC;--! Stepbutton 
+		   clk : in  STD_LOGIC;--! System clock
            reset : in  STD_LOGIC;--! Test reset
            abus : out  STD_LOGIC_VECTOR (7 downto 0);--! address bus
            dbus : in  STD_LOGIC_VECTOR (7 downto 0);--!data bus
@@ -25,7 +27,7 @@ entity bstprocV1 is
 		   );
 end bstprocV1;  
 
---! behavioral implements the FSMD for each supported SVF instruction
+--! Architecture
 architecture Behavioral of bstprocV1 is
 constant TMS0: unsigned(7 downto 0) := "10101110"; --! AEH
 constant TMS1: unsigned(7 downto 0) := "10101111"; --! AFH
@@ -51,6 +53,7 @@ signal ser_ptr_reg, ser_ptr_next: unsigned(7 downto 0);--! Pointer
 signal mask_ptr_reg, mask_ptr_next: unsigned(7 downto 0);--! Pointer
 signal tap1_reg, tap1_next, tap2_reg, tap2_next: std_logic;
 signal error_flag_reg, error_flag_next : std_logic;
+signal step_flag : std_logic;--! indicator if OK to step
 
 --! all possible states
 type state_type is (
@@ -92,6 +95,7 @@ begin
 		tap(0) <= tap1_reg;
 		tap(1) <= tap2_reg;
 		error_flag_reg <= '0';
+		step_flag <= '0';
 		
 	elsif (clk'event and clk='1') then
 		state_reg <= state_next;
@@ -111,13 +115,14 @@ begin
 		tap(0) <= tap1_reg;
 		tap(1) <= tap2_reg;
 		error_flag_reg <= error_flag_next;
+		step_flag <= push;
 	end if;
 end process;
 
 --! next state and outputs section
 process(state_reg,ir_reg,pc_reg,cnt_reg,ibyte_cnt_reg,rbits_cnt_reg,
 		ser_reg, exp_reg, mask_reg, exp_ptr_reg, ser_ptr_reg, mask_ptr_reg, 
-		tap1_reg, tap2_reg, error_flag_reg, offset, ready, dbus)
+		tap1_reg, tap2_reg, error_flag_reg, offset, ready, dbus, step_flag, board_tdo, push)
 begin
 state_next <= state_reg;
 ir_next <= ir_reg; 
@@ -138,18 +143,24 @@ mask_ptr_next <= mask_ptr_reg;
 exp_ptr_next <= exp_ptr_reg;
 error_flag_next <= error_flag_reg;
 
+
 --! defines what happens in each state
 case state_reg is 
 	when init =>
-		if (ready = '1') then
+		-- if (ready = '1') then
 			state_next <= all_1; --state_next <= all_0;
-		else
-			state_next <= init;
-		end if;
+		-- else
+			-- state_next <= init;
+		-- end if;
 	when all_0 =>
-		ir_next <= unsigned(dbus);
-		pc_next <= pc_reg+1;
-		state_next <= all_1;
+		-- if (step_flag = '0') then-- wait for push
+			-- state_next <= all_0;
+		-- else
+			ir_next <= unsigned(dbus);
+			pc_next <= pc_reg+1;
+			state_next <= all_1;
+		-- end if;
+		
 	when all_1 =>
 		if (ir_reg = SELTAP1) then
 			state_next <= seltap1_2;
@@ -311,7 +322,7 @@ case state_reg is
 			end if;
 		end if;
 	when shfcp_2a =>
-		board_tms <= '0';--
+		board_tms <= '0';-------------
 		state_next <= shfcp_3;
 	when shfcp_3 =>
 		ser_ptr_next <= pc_reg;
@@ -371,7 +382,7 @@ case state_reg is
 		ser_next <= ser_reg(6 downto 0) & '0';
 		exp_next <= exp_reg(6 downto 0) & '0';
 		mask_next <= mask_reg(6 downto 0) & '0';
-		if((mask_reg(7) and (exp_reg(7) xor board_tdo)) = '1') then
+		if(( mask_reg(7) = '1') and ((exp_reg(7) xor board_tdo) = '0')) then
 			error_flag_next <= '1';
 		end if;
 		state_next <= all_0;
@@ -387,7 +398,7 @@ case state_reg is
 		ser_next <= ser_reg(6 downto 0) & '0';
 		exp_next <= exp_reg(6 downto 0) & '0';
 		mask_next <= mask_reg(6 downto 0) & '0';
-		if((mask_reg(7) and (exp_reg(7) xor board_tdo)) = '1') then
+		if(( mask_reg(7) = '1') and ((exp_reg(7) xor board_tdo) = '0')) then
 			error_flag_next <= '1';
 		end if;
 		state_next <= shfcp_4;
@@ -411,7 +422,7 @@ case state_reg is
 		ser_next <= ser_reg(6 downto 0) & '0';
 		exp_next <= exp_reg(6 downto 0) & '0';
 		mask_next <= mask_reg(6 downto 0) & '0';
-		if((mask_reg(7) and (exp_reg(7) xor board_tdo)) = '1') then
+		if(( mask_reg(7) = '1') and ((exp_reg(7) xor board_tdo) = '0')) then
 			error_flag_next <= '1';
 		end if;
 		state_next <= shfcp_5;

@@ -24,7 +24,6 @@ entity mod_m_counter is
    );
 end mod_m_counter;
 
---! @brief arch has register, next-state logic and output logic
 architecture arch of mod_m_counter is
    signal r_reg: unsigned(N-1 downto 0);
    signal r_next: unsigned(N-1 downto 0);

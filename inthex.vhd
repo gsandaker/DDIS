@@ -1,6 +1,6 @@
 ----------------------------------------------------------------------------------
 --! @file
---! @briefDDIS3010 INT HEX Decoder V2
+--! @brief DDIS3010 INT HEX Decoder V2
 --! @author GJB
 ----------------------------------------------------------------------------------
 library IEEE;
@@ -8,6 +8,7 @@ use IEEE.STD_LOGIC_1164.ALL;
 use IEEE.NUMERIC_STD.ALL;
 
 --! @brief Intel-Hex decoder
+--! @details The intHex decoder is the "serializer" for the BSTprocessor
 entity inthex is
     Port ( clk : in  STD_LOGIC;
            reset : in  STD_LOGIC;
@@ -19,7 +20,7 @@ entity inthex is
            ready : out  STD_LOGIC);
 end inthex;
 
---! @brief Architecture of inthex recieves serial imput and serializes it
+--! @brief Architecture of inthex recieves serial input and serializes it
 architecture arch of inthex is
 
 signal addr_reg, addr_next: unsigned(7 downto 0);

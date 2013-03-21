@@ -7,7 +7,8 @@
 library ieee;
 use ieee.std_logic_1164.all;
 use ieee.numeric_std.all;
-
+--! @brief RAM module of size 8 by 8
+--! @details generic size can be changed in implementation
 entity ram_1p_sync is
    generic(
       ADDR_WIDTH: integer:=8;
@@ -21,7 +22,7 @@ entity ram_1p_sync is
       dout: out std_logic_vector(DATA_WIDTH-1 downto 0)
     );
 end ram_1p_sync;
-
+--! @brief arch defines it to be synchronous 
 architecture arch of ram_1p_sync is
    type ram_type is array (2**ADDR_WIDTH-1 downto 0)
         of std_logic_vector (DATA_WIDTH-1 downto 0);

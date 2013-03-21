@@ -25,7 +25,7 @@ entity bstprocV1 is
 		   );
 end bstprocV1;  
 
---! Architecture
+--! behavioral implements the FSMD for each supported SVF instruction
 architecture Behavioral of bstprocV1 is
 constant TMS0: unsigned(7 downto 0) := "10101110"; --! AEH
 constant TMS1: unsigned(7 downto 0) := "10101111"; --! AFH
@@ -311,7 +311,7 @@ case state_reg is
 			end if;
 		end if;
 	when shfcp_2a =>
-		board_tms <= '0';-------------
+		board_tms <= '0';--
 		state_next <= shfcp_3;
 	when shfcp_3 =>
 		ser_ptr_next <= pc_reg;

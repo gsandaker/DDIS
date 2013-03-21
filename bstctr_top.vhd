@@ -31,7 +31,7 @@ entity bstctr_top is
 		   );
 end bstctr_top;
 
---! @brief This architcture instantiates the other components
+--! @brief Behavioral instantiates the other components
 architecture Behavioral of bstctr_top is
 	signal ab: STD_LOGIC_VECTOR (7 downto 0);
 	signal ab1: STD_LOGIC_VECTOR (7 downto 0);

@@ -23,7 +23,7 @@ entity uart_rx is
       dout: out std_logic_vector(7 downto 0)
    );
 end uart_rx ;
---! @brief The Uart architecture implements a FSMD 
+--! @brief arch implements a FSMD 
 --! with the following states: idle, start, data, stop
 architecture arch of uart_rx is
    type state_type is (idle, start, data, stop);

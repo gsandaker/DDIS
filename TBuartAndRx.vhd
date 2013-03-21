@@ -1,45 +1,30 @@
 --------------------------------------------------------------------------------
--- Company: 
--- Engineer:
---
--- Create Date:   18:31:45 02/27/2013
--- Design Name:   
--- Module Name:   C:/Xilinx/usr/workspace/uart/TBuartAndRx.vhd
--- Project Name:  uart
--- Target Device:  
--- Tool versions:  
--- Description:   
--- 
--- VHDL Test Bench Created by ISE for module: bstctr_top
--- 
--- Dependencies:
--- 
--- Revision:
--- Revision 0.01 - File Created
--- Additional Comments:
---
--- Notes: 
--- This testbench has been automatically generated using types std_logic and
--- std_logic_vector for the ports of the unit under test.  Xilinx recommends
--- that these types always be used for the top-level I/O of a design in order
--- to guarantee that the testbench will bind correctly to the post-implementation 
--- simulation model.
+--! @file
+--! @brief VHDL Test Bench Created by ISE for module: bstctr_top
+--! @details 
+--! This testbench has been automatically generated using types std_logic and
+--! std_logic_vector for the ports of the unit under test.  Xilinx recommends
+--! that these types always be used for the top-level I/O of a design in order
+--! to guarantee that the testbench will bind correctly to the post-implementation 
+--! simulation model.
+--! @author Jose Ferreira
 --------------------------------------------------------------------------------
 LIBRARY ieee;
 USE ieee.std_logic_1164.ALL;
  
 -- Uncomment the following library declaration if using
 -- arithmetic functions with Signed or Unsigned values
---USE ieee.numeric_std.ALL;
+-- USE ieee.numeric_std.ALL;
  
  --! @brief Test bench for BST with uart  
 ENTITY TBuartAndRx IS
 END TBuartAndRx;
- 
+
+--! @brief behavior implements bstctr_top as a component
+--! @details the testbench simulates a svf program sent over uart
 ARCHITECTURE behavior OF TBuartAndRx IS 
  
     --! Component Declaration for the Unit Under Test (UUT)
- 
     COMPONENT bstctr_top
     PORT(
          clk : IN  std_logic;--! clock
@@ -95,7 +80,7 @@ BEGIN
           rx => rx
         );
 
-   -- Clock process definitions
+   --! Clock process definitions
    clk_process :process
    begin
 		clk <= '0';

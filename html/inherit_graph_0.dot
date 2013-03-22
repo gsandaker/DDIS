@@ -1,0 +1,19 @@
+digraph "Graphical Class Hierarchy"
+{
+  edge [fontname="Helvetica",fontsize="10",labelfontname="Helvetica",labelfontsize="10"];
+  node [fontname="Helvetica",fontsize="10",shape=record];
+  rankdir="LR";
+  Node1 [label="bstprocV1",height=0.2,width=0.4,color="black", fillcolor="white", style="filled",URL="$classbstproc_v1.html",tooltip="The actual processor entity of this BST."];
+  Node1 -> Node2 [dir="back",color="midnightblue",fontsize="10",style="solid",fontname="Helvetica"];
+  Node2 [label="bstctr_top",height=0.2,width=0.4,color="black", fillcolor="white", style="filled",URL="$classbstctr__top.html",tooltip="Top module for the BST controller."];
+  Node2 -> Node3 [dir="back",color="midnightblue",fontsize="10",style="solid",fontname="Helvetica"];
+  Node3 [label="TBuartAndRx",height=0.2,width=0.4,color="black", fillcolor="white", style="filled",URL="$class_t_buart_and_rx.html",tooltip="Test bench for BST with uart."];
+  Node4 [label="inthex",height=0.2,width=0.4,color="black", fillcolor="white", style="filled",URL="$classinthex.html",tooltip="Intel-Hex decoder."];
+  Node4 -> Node2 [dir="back",color="midnightblue",fontsize="10",style="solid",fontname="Helvetica"];
+  Node5 [label="mod_m_counter",height=0.2,width=0.4,color="black", fillcolor="white", style="filled",URL="$classmod__m__counter.html",tooltip="Baudrate generator."];
+  Node5 -> Node2 [dir="back",color="midnightblue",fontsize="10",style="solid",fontname="Helvetica"];
+  Node6 [label="ram_1p_sync",height=0.2,width=0.4,color="black", fillcolor="white", style="filled",URL="$classram__1p__sync.html"];
+  Node6 -> Node2 [dir="back",color="midnightblue",fontsize="10",style="solid",fontname="Helvetica"];
+  Node7 [label="uart_rx",height=0.2,width=0.4,color="black", fillcolor="white", style="filled",URL="$classuart__rx.html",tooltip="Uart reciever."];
+  Node7 -> Node2 [dir="back",color="midnightblue",fontsize="10",style="solid",fontname="Helvetica"];
+}
